@@ -19,7 +19,7 @@ mongoose.connect(db_link, (err) => {
 
 // API Endpoints
 app.get('/example', (req, res) => {
-    res.send("Exampel answer 22");
+    res.send("Exampel answer");
 });
 
 //... add more here
