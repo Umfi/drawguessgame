@@ -1,0 +1,16 @@
+{
+  "name": "draw-guess-game",
+  "version": "1.0.0",
+  "description": "Project for Web Technology",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Michael Umfahrer",
+  "license": "None",
+  "dependencies": {
+    "config": "^3.3.2",
+    "express": "^4.17.1",
+    "mongoose": "^5.10.15",
+    "socket.io": "^3.0.3"
+  }
+}
