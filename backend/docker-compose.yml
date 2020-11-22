@@ -13,6 +13,8 @@ services:
       - mongo  
     depends_on:
       - mongo
+    volumes:
+      - "./src:/usr/src/app"  
 
   mongo:
     container_name: drawguessgame_db
