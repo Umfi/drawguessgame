@@ -1,31 +1,15 @@
-// Declare dependencies
-const mongoose = require('mongoose');
-const express = require('express');
-const app = express();
+const config = require('./config/config')
 
-const port = process.env.port || 8000;
-const db_link = "mongodb://mongo:27017/drawguessdb";
+const express = require('express')
+const userRouter = require('./routers/user')
 
-// Connect to database
-mongoose.connect(db_link, (err) => {
-    if (err) {
-        console.error("Can't connect to database!");
-        console.error(err);
-    } else {
-        console.log("Connected to database!");
-    }
-});
+require('./db/db')
 
+const app = express()
 
-// API Endpoints
-app.get('/example', (req, res) => {
-    res.send("Exampel answer");
-});
+app.use(express.json())
+app.use(userRouter)
 
-//... add more here
-
-
-// Run the server
-app.listen(port, () => {
-    console.log('App is running successfully on port ' + port);
-});
+app.listen(config.PORT, () => {
+    console.log(`Server running on port ${config.PORT}`)
+})
