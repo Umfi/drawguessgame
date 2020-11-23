@@ -1,5 +1,6 @@
 const express = require('express')
 const User = require('../models/User')
+const Game = require('../models/Game')
 const auth = require('../middleware/auth')
 
 const router = express.Router()

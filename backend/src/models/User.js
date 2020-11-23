@@ -9,6 +9,7 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true,
         unique: true,
+        sparse: true,
         validate: value => {
             if (!validator.isAlphanumeric(value)) {
                 throw new Error({error: 'Invalid user name (only letters and nubers)'})
