@@ -8,16 +8,10 @@ const userSchema = mongoose.Schema({
     name: {
         type: String,
         required: true,
-        trim: true
-    },
-    email: {
-        type: String,
-        required: true,
         unique: true,
-        lowercase: true,
         validate: value => {
-            if (!validator.isEmail(value)) {
-                throw new Error({error: 'Invalid Email address'})
+            if (!validator.isAlphanumeric(value)) {
+                throw new Error({error: 'Invalid user name (only letters and nubers)'})
             }
         }
     },
@@ -52,9 +46,9 @@ userSchema.methods.generateAuthToken = async function() {
     return token
 }
 
-userSchema.statics.findByCredentials = async (email, password) => {
-    // Search for a user by email and password.
-    const user = await User.findOne({ email} )
+userSchema.statics.findByCredentials = async (name, password) => {
+    // Search for a user by name and password.
+    const user = await User.findOne({ name})
     if (!user) {
         throw new Error('Invalid login credentials')
     }
