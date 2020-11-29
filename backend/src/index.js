@@ -1,17 +1,30 @@
-const config = require('./config/config')
+const config = require('./config')
 
-const express = require('express')
-const userRouter = require('./routers/user')
-const gameRouter = require('./routers/game')
+// Server code
+var WebSocketServer = require('ws').Server;
+var server = new WebSocketServer({ port: config.PORT });
 
-require('./db/db')
+var User = require('./game').User;
+var Room = require('./game').Room;
+var GameRoom = require('./game').GameRoom;
+var room1 = new GameRoom();
 
-const app = express()
+server.on('connection', function (socket) {
+    var user = new User(socket);
+    room1.addUser(user);
+    console.log("A connection established");
 
-app.use(express.json())
-app.use(userRouter)
-app.use(gameRouter)
 
-app.listen(config.PORT, () => {
-    console.log(`Server running on port ${config.PORT}`)
-})
+    //Chat
+    user.socket.on("message", function (message) {
+        console.log("Receive message from " + user.id + ": " + message);
+        // send to all users in room.
+        var msg = "User " + user.id + " said: " + message;
+        room1.sendAll(msg);
+    });
+});
+
+console.log("WebSocket server is running.");
+console.log("Listening to port " + config.PORT + ".");
+
+
