@@ -16,6 +16,8 @@ var websocketGame = {
     GAME_RESTART: 3,
     // Logic
     isTurnToDraw: false,
+    currentColor: "black",
+    currentLineWidth: 1
 }
 
 // canvas context
@@ -51,8 +53,7 @@ $(function () {
                     + " said: " + data.message + "</li>");
             }
             else if (data.dataType === websocketGame.LINE_SEGMENT) {
-                drawLine(ctx, data.startX, data.startY,
-                    data.endX, data.endY, 1);
+                drawLine(ctx, data.startX, data.startY, data.endX, data.endY, data.color, data.thickness);
             }
             else if (data.dataType === websocketGame.GAME_LOGIC) {
                 if (data.gameState === websocketGame.GAME_OVER) {
@@ -107,14 +108,13 @@ $(function () {
                 // relative to the canvas top-left point.
                 var mouseX = e.originalEvent.layerX || e.offsetX || 0;
                 var mouseY = e.originalEvent.layerY || e.offsetY || 0;
-                if (!(mouseX === websocketGame.startX &&
-                    mouseY === websocketGame.startY)) {
+                if (!(mouseX === websocketGame.startX && mouseY === websocketGame.startY)) {
                    
                     // send the line segment to server
 
                     if (websocketGame.isTurnToDraw) {
 
-                        drawLine(ctx, websocketGame.startX, websocketGame.startY, mouseX, mouseY, 1);
+                        drawLine(ctx, websocketGame.startX, websocketGame.startY, mouseX, mouseY, websocketGame.currentColor, websocketGame.currentLineWidth);
 
                         var data = {};
                         data.dataType = websocketGame.LINE_SEGMENT;
@@ -122,6 +122,8 @@ $(function () {
                         data.startY = websocketGame.startY;
                         data.endX = mouseX;
                         data.endY = mouseY;
+                        data.color = websocketGame.currentColor;
+                        data.thickness = websocketGame.currentLineWidth;
                         websocketGame.socket.send(JSON.stringify(data));
 
                         websocketGame.startX = mouseX;
@@ -148,6 +150,22 @@ $(function () {
             websocketGame.socket.send(JSON.stringify(data));
             $("#restart").hide();
         });
+
+
+
+        // Handle Colors
+        var colors = document.getElementsByClassName('colors')[0];
+
+        colors.addEventListener('click', function(event) {
+            websocketGame.currentColor = event.target.value || 'black';
+        });
+
+        // Handle Brushes
+        var brushes = document.getElementsByClassName('brushes')[0];
+
+        brushes.addEventListener('click', function(event) {
+            websocketGame.currentLineWidth = event.target.value || 1;
+        });
     }
 });
 
@@ -162,11 +180,11 @@ function sendMessage() {
     $("#chat-input").val("");
 }
 
-function drawLine(ctx, x1, y1, x2, y2, thickness) {
+function drawLine(ctx, x1, y1, x2, y2, color, lineWidth) {
     ctx.beginPath();
     ctx.moveTo(x1, y1);
     ctx.lineTo(x2, y2);
-    ctx.lineWidth = thickness;
-    ctx.strokeStyle = "#444";
+    ctx.lineWidth = lineWidth;
+    ctx.strokeStyle = color;
     ctx.stroke();
 }
