@@ -12,7 +12,17 @@
     <div id="app">
 
         <h1>Draw Guess Game</h1>
-        <div class="row">
+        
+        <div class="row" id="setup">
+            <h2>Choose your user name</h2>
+            <form>
+                <label for="username">Username:</label><br>
+                <input type="text" id="username" name="username"><br>
+                <input type="button" id="save_username_btn" value="Submit">
+            </form> 
+        </div>
+
+        <div class="row" id="game">
             <div class="column">
                 <canvas id='drawing-pad' width='500' height='400'></canvas>
                 <hr>
@@ -65,17 +75,14 @@
                 <input type="button" value="Restart" id="restart">
 
             </div>
-
         </div>
         
     </div>
 
 
-   
-
     <!-- JS Logic -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="js/websocket.js"></script>
+    <script src="js/app.js"></script>
 </body>
 
 </html>
