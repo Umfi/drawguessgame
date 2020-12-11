@@ -84,9 +84,8 @@ class GameView {
     enableChat() {
 
         var message = function generateMessageText() {
-            var user = app.getUser();
             //TODO: check message for illegal input
-            return  user.name + " said: " + $("#chat-input").val();
+            return  $("#chat-input").val();
         }
 
         document.getElementById('chat-input').addEventListener('keypress', (event) => {
@@ -202,7 +201,8 @@ class GameController {
     }
 
     initGame() {
-        websocketGame.socket = new WebSocket("ws://127.0.0.1:8080");
+        var user = this.getUser().name;
+        websocketGame.socket = new WebSocket("ws://127.0.0.1:8080?user=" + user);
         this.gameView.enableChat();
         var that = this;
         websocketGame.socket.onmessage = function(evt) {that.handleWebsocketEvents(evt); };
@@ -215,9 +215,6 @@ class GameController {
         data.message = message;
         data.gameState = state;
         websocketGame.socket.send(JSON.stringify(data));
-        // if(type == websocketGame.CHAT_MESSAGE || state == websocketGame.GAME_RESTART){
-        this.gameView.writeToChat(message);
-        // }
     }
     
     restartGame(){

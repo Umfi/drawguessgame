@@ -1,5 +1,8 @@
 const config = require('./config')
 
+const http = require('http');
+const url = require('url');
+
 // Server code
 var WebSocketServer = require('ws').Server;
 var server = new WebSocketServer({ port: config.PORT });
@@ -9,8 +12,11 @@ var Room = require('./game').Room;
 var GameRoom = require('./game').GameRoom;
 var room1 = new GameRoom();
 
-server.on('connection', function (socket) {
-    var user = new User(socket);
+server.on('connection', function (socket, req) {
+
+    const queryObject = url.parse(req.url,true).query;
+
+    var user = new User(socket, queryObject.user);
     room1.addUser(user);
     console.log("A connection established");
 
@@ -19,7 +25,7 @@ server.on('connection', function (socket) {
     user.socket.on("message", function (message) {
         console.log("Receive message from " + user.id + ": " + message);
         // send to all users in room.
-        var msg = "User " + user.id + " said: " + message;
+        var msg = user.name + " said: " + message;
         room1.sendAll(msg);
     });
 });

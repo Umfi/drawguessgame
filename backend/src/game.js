@@ -9,11 +9,12 @@ var GAME_START = 1;
 var GAME_OVER = 2;
 var GAME_RESTART = 3;
 
-function User(socket) {
+function User(socket, name) {
     this.socket = socket;
     // assign a random number to User.
     // Long enough to make duplication chance less.
     this.id = "1" + Math.floor(Math.random() * 1000000000);
+    this.name = name;
 }
 
 function Room() {
@@ -45,7 +46,7 @@ Room.prototype.addUser = function (user) {
     var data = {
         dataType: CHAT_MESSAGE,
         sender: "Server",
-        message: "Welcome " + user.id
+        message: "Welcome " + user.name
             + " joining the party. Total connection: " + this.users.
                 length
     };
@@ -84,7 +85,7 @@ Room.prototype.handleOnUserMessage = function (user) {
         var data = JSON.parse(message);
         if (data.dataType === CHAT_MESSAGE) {
             // add the sender information into the message data object.
-            data.sender = user.id;
+            data.sender = user.name;
         }
         // send to all clients in room.
         room.sendAll(JSON.stringify(data));
@@ -111,7 +112,7 @@ GameRoom.prototype.handleOnUserMessage = function (user) {
         var data = JSON.parse(message);
         if (data.dataType === CHAT_MESSAGE) {
             // add the sender information into the message data object.
-            data.sender = user.id;
+            data.sender = user.name;
         }
         room.sendAll(JSON.stringify(data));
         // check if the message is guessing right or wrong
