@@ -1,8 +1,9 @@
 // Constants
-// Constants
 var LINE_SEGMENT = 0;
 var CHAT_MESSAGE = 1;
 var GAME_LOGIC = 2;
+var CLEAR_SCREEN = 3;
+
 // Constant for game logic state
 var WAITING_TO_START = 0;
 var GAME_START = 1;
