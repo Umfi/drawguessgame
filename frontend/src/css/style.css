@@ -1,3 +1,7 @@
+.hidden {
+  display: none;
+}
+
 .column {
     float: left;
     width: 50%;
