@@ -289,7 +289,7 @@ class GameController {
         else if (data.dataType === websocketGame.GAME_LOGIC) {
             if (data.gameState === websocketGame.GAME_OVER) {
                 websocketGame.isTurnToDraw = false;
-                message = data.winner + " wins! The answer is '" + data.answer;
+                message = data.winner + " wins! The answer is '" + data.answer + "'";
                 this.gameView.writeToChat(message);
                 this.gameView.showRestartButton();
             }
@@ -302,7 +302,7 @@ class GameController {
                 this.gameView.clearChat();
                 if (data.isPlayerTurn) {
                     websocketGame.isTurnToDraw = true;
-                    message = "Your turn to draw. Please draw '" + data.answer;
+                    message = "Your turn to draw. Please draw '" + data.answer + "'";
                     this.gameView.writeToChat(message);
                 } else {
                     message = "Game Started. Get Ready. You have one minute to guess.";

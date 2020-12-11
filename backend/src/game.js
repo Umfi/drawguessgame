@@ -127,7 +127,7 @@ GameRoom.prototype.handleOnUserMessage = function (user) {
                 var gameLogicData = {
                     dataType: GAME_LOGIC,
                     gameState: GAME_OVER,
-                    winner: user.id,
+                    winner: user.name,
                     answer: room.currentAnswer
                 };
                 room.sendAll(JSON.stringify(gameLogicData));
@@ -171,7 +171,7 @@ GameRoom.prototype.startGame = function () {
     var user = this.users[this.playerTurn];
     user.socket.send(JSON.stringify(gameLogicDataForDrawer));
     // game over the game after 1 minute.
-    gameOverTimeout = setTimeout(function () {
+    room.gameOverTimeout = setTimeout(function () {
         var gameLogicData = {
             dataType: GAME_LOGIC,
             gameState: GAME_OVER,
