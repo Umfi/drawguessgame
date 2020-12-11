@@ -209,6 +209,13 @@ class GameController {
     }
 
     sendMessage(message, type, state) {
+
+        // Dont send message when user is drawing
+        if (type == websocketGame.CHAT_MESSAGE && websocketGame.isTurnToDraw) {
+            alert("You cant chat while drawing!");
+            return;
+        }
+
         // pack the message into an object.
         var data = {};
         data.dataType = type;
