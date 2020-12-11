@@ -21,7 +21,9 @@ const websocketGame = {
     // Logic
     isTurnToDraw: false,
     currentColor: "black",
-    currentLineWidth: 1
+    currentLineWidth: 1,
+    time: 60,
+    timerInterval: 0
 };
 
 // ============== View ========================= 
@@ -172,6 +174,10 @@ class GameView {
             app.draw(mouseX, mouseY);
         });
     }
+    
+    updateTimer(time){
+        $('#timer').html(time);
+    }
 }
 
 const gameView = new GameView();
@@ -299,6 +305,7 @@ class GameController {
                 message = data.winner + " wins! The answer is '" + data.answer + "'";
                 this.gameView.writeToChat(message);
                 this.gameView.showRestartButton();
+                this.stopTimer();
             }
             if (data.gameState === websocketGame.GAME_START) {
                 // clear the Canvas.
@@ -315,8 +322,24 @@ class GameController {
                     message = "Game Started. Get Ready. You have one minute to guess.";
                     this.gameView.writeToChat(message);
                 }
+                this.startTimer();
             }
         }
+    }
+    
+    startTimer(){
+        //TODO: fix off by one (or two?) error
+        this.stopTimer();
+        websocketGame.time = 60;
+        var that = this;
+        websocketGame.timerInterval = setInterval(function (){
+            that.gameView.updateTimer(websocketGame.time);
+            websocketGame.time--;
+        }, 1000);
+    }
+    
+    stopTimer(){
+        clearInterval(websocketGame.timerInterval)
     }
 }
 
