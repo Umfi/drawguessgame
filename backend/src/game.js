@@ -12,7 +12,6 @@ var LEAVE = 1;
 var WAITING_TO_START = 0;
 var GAME_START = 1;
 var GAME_OVER = 2;
-var GAME_RESTART = 3;
 
 function User(socket, name) {
     this.socket = socket;
@@ -156,10 +155,9 @@ GameRoom.prototype.handleOnUserMessage = function (user) {
                 room.currentGameState = WAITING_TO_START;
                 // clear the game over timeout
                 clearTimeout(room.gameOverTimeout);
+
+                room.restartGame();
             }
-        }
-        if (data.dataType === GAME_LOGIC && data.gameState === GAME_RESTART) {
-            room.startGame();
         }
     });
 };
@@ -168,11 +166,9 @@ GameRoom.prototype.startGame = function () {
     var room = this;
     // pick a player to draw
     this.playerTurn = (this.playerTurn + 1) % this.users.length;
-    console.log("Start game with player " + this.playerTurn
-        + "'s turn.");
+    console.log("Start game with player " + this.playerTurn + "'s turn.");
     // pick an answer
-    var answerIndex = Math.floor(Math.random() *
-        this.wordsList.length);
+    var answerIndex = Math.floor(Math.random() * this.wordsList.length);
     this.currentAnswer = this.wordsList[answerIndex];
     // game start for all players
     var gameLogicDataForAllPlayers = {
@@ -201,6 +197,8 @@ GameRoom.prototype.startGame = function () {
         };
         room.sendAll(JSON.stringify(gameLogicData));
         room.currentGameState = WAITING_TO_START;
+
+        room.restartGame();
     }, 60 * 1000);
     room.currentGameState = GAME_START;
 };
@@ -220,7 +218,31 @@ GameRoom.prototype.stopGame = function () {
     this.sendAll(JSON.stringify(gameLogicDataForAllPlayers));
     
     room.currentGameState = WAITING_TO_START;
+
+    room.restartGame();
 };
+
+GameRoom.prototype.restartGame = function () {
+    var room = this;
+
+    // next round in 3 seconds
+    setTimeout(function (){
+        if (room.users.length >= 2) {
+            room.startGame();
+        } else {
+
+            room.currentGameState = WAITING_TO_START;
+
+            var data = {
+                dataType: CHAT_MESSAGE,
+                sender: "Server",
+                message: "Only one player left. Waiting for players."
+            };
+            room.sendAll(JSON.stringify(data));
+        }
+    }, 3000);
+};
+
 
 module.exports.User = User;
 module.exports.Room = Room;

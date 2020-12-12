@@ -18,11 +18,11 @@ const websocketGame = {
     //Game Events
     JOIN: 0,
     LEAVE: 1,
+    WIN: 2,
     // Constant for game logic state
     WAITING_TO_START: 0,
     GAME_START: 1,
     GAME_OVER: 2,
-    GAME_RESTART: 3,
     // Logic
     isTurnToDraw: false,
     currentColor: "black",
@@ -37,8 +37,6 @@ class GameView {
         console.log("Start Drawing Guess Game");
         this.renderScreen();
         this.enableRegistration();
-        this.hideRestartButton();
-        this.enableRestartButton();
         this.initDrawingTools();
         this.initCanvas();
     }
@@ -82,12 +80,8 @@ class GameView {
         });
 
         document.getElementById('geolocation').addEventListener("click", (event ) => {
-            this.geoLocationnBtnClicked();
+            app.setGeoLocation();
         });
-    }
-
-    geoLocationnBtnClicked() {
-        app.setGeoLocation();
     }
 
     registrationBtnClicked() {
@@ -116,25 +110,12 @@ class GameView {
         });
     }
 
-
-    showRestartButton() {
-        $("#restart").show();
-    }
-    hideRestartButton() {
-        $("#restart").hide();
-    }
-    
     showDrawingTools() {
         $("#drawingtools").show();
     }
+
     hideDrawingTools() {
         $("#drawingtools").hide();
-    }
-
-    enableRestartButton(){
-        document.getElementById('restart').addEventListener('click', (event) => {
-            app.restartGame();
-        });
     }
     
     clearCanvas(){
@@ -152,20 +133,21 @@ class GameView {
     
     initDrawingTools(){
     
+        // Handle colors
         var colors = document.getElementsByClassName('colors')[0];
 
         colors.addEventListener('click', function(event) {
             app.setCurrentColor(event.target.value || 'black');
         });
 
-        // Handle Brushes
+        // Handle brushes
         var brushes = document.getElementsByClassName('brushes')[0];
 
         brushes.addEventListener('click', function(event) {
             app.setCurrentLineWidth(event.target.value || 1);
         });
 
-    
+        // Handle clear screen button
         document.getElementById('clearScreenBtn').addEventListener('click', function(event) {
             app.clearCanvas();
         });
@@ -214,6 +196,10 @@ class GameView {
             var audio = new Audio('http://127.0.0.1/audio/leave.wav');
             audio.play();
         }
+        else if (gameEvent === websocketGame.WIN) {
+            var audio = new Audio('http://127.0.0.1/audio/win.wav');
+            audio.play();
+        }
     }
 }
 
@@ -246,7 +232,7 @@ class GameController {
                 $("#country").val(data);
                 userData.country = data;
             });
-          });
+        });
     }
     completeSetup(userName) {
         userData.name = userName;
@@ -276,13 +262,6 @@ class GameController {
         data.message = message;
         data.gameState = state;
         websocketGame.socket.send(JSON.stringify(data));
-    }
-    
-    restartGame(){
-        this.gameView.clearCanvas();
-        this.gameView.clearChat();
-        this.sendMessage("Restart Game", websocketGame.GAME_LOGIC, websocketGame.GAME_RESTART);
-        this.gameView.hideRestartButton();
     }
     
     setCurrentColor(color){
@@ -361,22 +340,26 @@ class GameController {
                 websocketGame.isTurnToDraw = false;
                 message = data.winner + " wins! The answer is '" + data.answer + "'";
                 this.gameView.writeToChat(message);
-                this.gameView.showRestartButton();
+
+                if (data.winner === this.getUser().name) {
+                    this.gameView.playSound(websocketGame.WIN);
+                }
+                
                 this.stopTimer();
             }
             if (data.gameState === websocketGame.GAME_START) {
                 // clear the Canvas.
                 this.gameView.clearCanvas();
-                // hide the restart button.
-                this.gameView.hideRestartButton();
                 // clear the chat history
                 this.gameView.clearChat();
+
                 if (data.isPlayerTurn) {
                     websocketGame.isTurnToDraw = true;
                     message = "Your turn to draw. Please draw '" + data.answer + "'";
                     this.gameView.writeToChat(message);
                     this.gameView.showDrawingTools();
                 } else {
+                    websocketGame.isTurnToDraw = false;
                     message = "Game Started. Get Ready. You have one minute to guess.";
                     this.gameView.writeToChat(message);
                     this.gameView.hideDrawingTools();
