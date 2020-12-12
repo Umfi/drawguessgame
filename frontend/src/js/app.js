@@ -15,6 +15,9 @@ const websocketGame = {
     CHAT_MESSAGE: 1,
     GAME_LOGIC: 2,
     CLEAR_SCREEN: 3,
+    //Game Events
+    JOIN: 0,
+    LEAVE: 1,
     // Constant for game logic state
     WAITING_TO_START: 0,
     GAME_START: 1,
@@ -201,6 +204,17 @@ class GameView {
     updateTimer(time){
         $('#timer').html(time);
     }
+
+    playSound(gameEvent) {
+        if (gameEvent === websocketGame.JOIN) {
+            var audio = new Audio('http://127.0.0.1/audio/join.wav');
+            audio.play();
+        }
+        else if (gameEvent === websocketGame.LEAVE) {
+            var audio = new Audio('http://127.0.0.1/audio/leave.wav');
+            audio.play();
+        }
+    }
 }
 
 const gameView = new GameView();
@@ -332,6 +346,7 @@ class GameController {
         var data = JSON.parse(e.data);
         var message;
         if (data.dataType === websocketGame.CHAT_MESSAGE) {
+            this.gameView.playSound(data.gameEvent);
             message = data.sender + " said: " + data.message;
             this.gameView.writeToChat(message);
         } 

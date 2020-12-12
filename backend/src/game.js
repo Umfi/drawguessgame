@@ -4,6 +4,10 @@ var CHAT_MESSAGE = 1;
 var GAME_LOGIC = 2;
 var CLEAR_SCREEN = 3;
 
+// Game Events
+var JOIN = 0;
+var LEAVE = 1;
+
 // Constant for game logic state
 var WAITING_TO_START = 0;
 var GAME_START = 1;
@@ -52,6 +56,7 @@ Room.prototype.addUser = function (user) {
     // tell others that someone joins the room
     var data = {
         dataType: CHAT_MESSAGE,
+        gameEvent: JOIN,
         sender: "Server",
         message: "Welcome " + user.name + " joining the party. Total connection: " + this.users.length
     };
@@ -79,6 +84,7 @@ Room.prototype.removeUser = function (user) {
     // tell others that someone left the room
     var data = {
         dataType: CHAT_MESSAGE,
+        gameEvent: LEAVE,
         sender: "Server",
         message: user.name + " left the party. Total connection: " + this.users.length
     };
