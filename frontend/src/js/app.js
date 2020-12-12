@@ -1,6 +1,7 @@
 // ============== Model ========================= 
 const userData = {
     'name': "",
+    'country': ""
 };
 
 const websocketGame = {
@@ -76,6 +77,14 @@ class GameView {
         document.getElementById('save_username_btn').addEventListener("click", (event ) => {
                 this.registrationBtnClicked();
         });
+
+        document.getElementById('geolocation').addEventListener("click", (event ) => {
+            this.geoLocationnBtnClicked();
+        });
+    }
+
+    geoLocationnBtnClicked() {
+        app.setGeoLocation();
     }
 
     registrationBtnClicked() {
@@ -214,6 +223,17 @@ class GameController {
         }
     }
 
+    setGeoLocation() {
+        navigator.geolocation.getCurrentPosition(function(location) {
+            var lat = location.coords.latitude;
+            var lng = location.coords.longitude;
+
+            $.get( "http://127.0.0.1:8080/location?long=" + lng + "&lat=" + lat, function( data ) {
+                $("#country").val(data);
+                userData.country = data;
+            });
+          });
+    }
     completeSetup(userName) {
         userData.name = userName;
         localStorage.setItem('userData', JSON.stringify(userData));

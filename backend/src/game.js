@@ -25,7 +25,13 @@ function Room() {
 function GameRoom() {
     // the current turn of player index.
     this.playerTurn = 0;
-    this.wordsList = ['apple', 'idea', 'wisdom', 'angry'];
+    this.wordsList = [
+                      'apple', 'customer', 'restaurant', 'farmer', 'computer', 
+                      'book', 'smartphone', 'cake', 'gun', 'ship', 'lake', 'camera',
+                      'nature', 'chest', 'key', 'secretary', 'football', 'school',
+                      'church', 'gate', 'contract', 'relationship', 'friendship', 
+                      'music', 'war', 'alcohol', 'technology', 'homework', 'girl'
+                    ];
     this.currentAnswer = undefined;
     this.currentGameState = WAITING_TO_START;
     // send the game state to all players.
@@ -47,9 +53,7 @@ Room.prototype.addUser = function (user) {
     var data = {
         dataType: CHAT_MESSAGE,
         sender: "Server",
-        message: "Welcome " + user.name
-            + " joining the party. Total connection: " + this.users.
-                length
+        message: "Welcome " + user.name + " joining the party. Total connection: " + this.users.length
     };
     room.sendAll(JSON.stringify(data));
 
@@ -63,11 +67,26 @@ Room.prototype.addUser = function (user) {
 };
 
 Room.prototype.removeUser = function (user) {
+    var room = this;
+
     // loop to find the user
     for (var i = this.users.length; i >= 0; i--) {
         if (this.users[i] === user) {
             this.users.splice(i, 1);
         }
+    }
+
+    // tell others that someone left the room
+    var data = {
+        dataType: CHAT_MESSAGE,
+        sender: "Server",
+        message: user.name + " left the party. Total connection: " + this.users.length
+    };
+    room.sendAll(JSON.stringify(data));
+
+    // stop game if only one player is left
+    if (this.users.length < 2) {
+        this.stopGame();
     }
 };
 
@@ -98,8 +117,7 @@ GameRoom.prototype.addUser = function (user) {
     // a.k.a. super(user) in traditional OOP language.
     Room.prototype.addUser.call(this, user);
     // start the game if there are 2 or more connections
-    if (this.currentGameState === WAITING_TO_START && this.users.
-        length >= 2) {
+    if (this.currentGameState === WAITING_TO_START && this.users.length >= 2) {
         this.startGame();
     }
 };
@@ -108,8 +126,7 @@ GameRoom.prototype.handleOnUserMessage = function (user) {
     var room = this;
     // handle on message
     user.socket.on('message', function (message) {
-        console.log("[GameRoom] Receive message from "
-            + user.id + ": " + message);
+        console.log("[GameRoom] Receive message from " + user.id + ": " + message);
         var data = JSON.parse(message);
         if (data.dataType === CHAT_MESSAGE) {
             // add the sender information into the message data object.
@@ -120,11 +137,9 @@ GameRoom.prototype.handleOnUserMessage = function (user) {
         if (data.dataType === CHAT_MESSAGE) {
             console.log("Current state: " + room.currentGameState);
             if (room.currentGameState === GAME_START) {
-                console.log("Got message: " + data.message
-                    + " (Answer: " + room.currentAnswer + ")");
+                console.log("Got message: " + data.message + " (Answer: " + room.currentAnswer + ")");
             }
-            if (room.currentGameState === GAME_START &&
-                data.message === room.currentAnswer) {
+            if (room.currentGameState === GAME_START && data.message === room.currentAnswer) {
                 var gameLogicData = {
                     dataType: GAME_LOGIC,
                     gameState: GAME_OVER,
@@ -137,8 +152,7 @@ GameRoom.prototype.handleOnUserMessage = function (user) {
                 clearTimeout(room.gameOverTimeout);
             }
         }
-        if (data.dataType === GAME_LOGIC &&
-            data.gameState === GAME_RESTART) {
+        if (data.dataType === GAME_LOGIC && data.gameState === GAME_RESTART) {
             room.startGame();
         }
     });
@@ -183,6 +197,23 @@ GameRoom.prototype.startGame = function () {
         room.currentGameState = WAITING_TO_START;
     }, 60 * 1000);
     room.currentGameState = GAME_START;
+};
+
+GameRoom.prototype.stopGame = function () {
+    var room = this;
+
+    clearTimeout(room.gameOverTimeout);
+
+    // game start for all players
+    var gameLogicDataForAllPlayers = {
+        dataType: GAME_LOGIC,
+        gameState: GAME_OVER,
+        winner: "No one",
+        answer: room.currentAnswer
+    };
+    this.sendAll(JSON.stringify(gameLogicDataForAllPlayers));
+    
+    room.currentGameState = WAITING_TO_START;
 };
 
 module.exports.User = User;

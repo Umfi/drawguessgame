@@ -8,9 +8,8 @@
   "author": "Michael Umfahrer",
   "license": "None",
   "dependencies": {
-    "mongodb": "^3.6.3",
-    "mongoose": "^5.10.15",
-    "nanoid": "^3.1.18",
+    "express": "^4.17.1",
+    "which-country": "^1.0.0",
     "ws": "^7.4.0"
   }
 }

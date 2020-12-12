@@ -1,36 +1,78 @@
-const config = require('./config')
+const config = require('./config');
 
-const http = require('http');
+const express = require('express');
+const ws = require('ws');
 const url = require('url');
+const wc = require('which-country');
 
-// Server code
-var WebSocketServer = require('ws').Server;
-var server = new WebSocketServer({ port: config.PORT });
+const app = express()
+
+
+// WebSocketServer 
+
+const wsServer = new ws.Server({noServer: true });
 
 var User = require('./game').User;
 var Room = require('./game').Room;
 var GameRoom = require('./game').GameRoom;
-var room1 = new GameRoom();
+var lobby = new GameRoom();
 
-server.on('connection', function (socket, req) {
+wsServer.on('connection', function (socket, req) {
 
+    // Parse username from url
     const queryObject = url.parse(req.url,true).query;
 
     var user = new User(socket, queryObject.user);
-    room1.addUser(user);
+    lobby.addUser(user);
     console.log("A connection established");
 
-
-    //Chat
+    // Websocket communication
     user.socket.on("message", function (message) {
         console.log("Receive message from " + user.id + ": " + message);
         // send to all users in room.
         var msg = user.name + " said: " + message;
-        room1.sendAll(msg);
+        lobby.sendAll(msg);
     });
+});
+
+
+
+// Web-Server
+const server = app.listen(config.PORT);
+
+server.on('upgrade', (request, socket, head) => {
+    wsServer.handleUpgrade(request, socket, head, socket => {
+        wsServer.emit('connection', socket, request);
+    });
+});
+
+// Add headers
+app.use(function (req, res, next) {
+
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+    // Pass to next layer of middleware
+    next();
+});
+
+// Routes
+app.get('/location', (req, res) => {
+    var long = req.query.long;
+    var lat = req.query.lat;
+
+    res.send(wc([long, lat])); 
 });
 
 console.log("WebSocket server is running.");
 console.log("Listening to port " + config.PORT + ".");
-
-
