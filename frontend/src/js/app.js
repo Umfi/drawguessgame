@@ -45,6 +45,7 @@ class GameView {
         this.enableRegistration();
         this.initDrawingTools();
         this.initCanvas();
+        this.initDownloadBtn();
     }
 
     renderScreen() {
@@ -140,6 +141,10 @@ class GameView {
         });
     }
 
+    setGuessWord(word) {
+        $(".word").html(word);
+    }
+
     showDrawingTools() {
         $("#drawingtools").removeClass("disabled");
     }
@@ -230,6 +235,23 @@ class GameView {
             var audio = new Audio('http://127.0.0.1/audio/win.wav');
             audio.play();
         }
+    }
+
+    initDownloadBtn() {
+        var that = this;
+        document.getElementById('download').addEventListener('click', function(event) {
+            that.downloadFile();
+        });
+    }
+
+    downloadFile() {
+        var imageName = prompt('Please enter image name');
+        var canvas = document.getElementById('drawing-pad');
+        var canvasDataURL = canvas.toDataURL();
+        var a = document.createElement('a');
+        a.href = canvasDataURL;
+        a.download = imageName || 'drawing';
+        a.click();  
     }
 }
 
@@ -399,11 +421,13 @@ class GameController {
 
                 if (data.isPlayerTurn) {
                     websocketGame.isTurnToDraw = true;
+                    this.gameView.setGuessWord(data.answer);
                     message = "Your turn to draw. Please draw '" + data.answer + "'";
                     this.gameView.writeToChat(message);
                     this.gameView.showDrawingTools();
                 } else {
                     websocketGame.isTurnToDraw = false;
+                    this.gameView.setGuessWord(data.answerHint);
                     message = "Game Started. Get Ready. You have one minute to guess.";
                     this.gameView.writeToChat(message);
                     this.gameView.hideDrawingTools();

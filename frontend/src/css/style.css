@@ -163,6 +163,14 @@ li {
     border: 1px solid #DDDDDD;
 }
 
+.word {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 4%;
+  font-size: 24px;
+  font-weight: 700;
+}
+
 #drawingtools {
   margin-left: 10%;
   margin-right: 5%;

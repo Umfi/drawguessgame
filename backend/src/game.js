@@ -170,11 +170,19 @@ GameRoom.prototype.startGame = function () {
     // pick an answer
     var answerIndex = Math.floor(Math.random() * this.wordsList.length);
     this.currentAnswer = this.wordsList[answerIndex];
+
+    var hint = "";
+    
+    for (var i = 0; i < this.currentAnswer.length; i++) {
+        hint += "_ ";
+    }
+
     // game start for all players
     var gameLogicDataForAllPlayers = {
         dataType: GAME_LOGIC,
         gameState: GAME_START,
-        isPlayerTurn: false
+        isPlayerTurn: false,
+        answerHint: hint
     };
     this.sendAll(JSON.stringify(gameLogicDataForAllPlayers));
     // game start with answer to the player in turn.
