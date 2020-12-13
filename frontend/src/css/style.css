@@ -1,5 +1,26 @@
+@import url("https://fonts.googleapis.com/css?family=Fjalla+One&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: url("/img/bg.jpg") center center no-repeat;
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+}
+
 .hidden {
   display: none;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.4;
 }
 
 .column {
@@ -12,55 +33,114 @@
     content: "";
     display: table;
     clear: both;
+    width: 80%;
 }
 
 h1 {
     text-align: center;
+    margin-bottom: 3%;
 }
+
+.doc_link {
+  position:absolute;
+  top:0;
+  right:0;
+  float: right;
+  font: bold 18px Arial;
+  text-decoration: none;
+  background-color: #4355bd;
+  color: #ffffff;
+  padding: 2px 6px 2px 6px;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+  cursor: pointer;
+}
+
+.doc_link:hover {
+  background-color: #50598f;
+}
+
+#setup {
+  background: #f8f4e5;
+  padding: 50px 100px;
+  border: 2px solid black;
+  box-shadow: 15px 15px 1px #ffa580, 15px 15px 1px 2px black;
+}
+
+input {
+  display: block;
+  width: 100%;
+  font-size: 14pt;
+  line-height: 28pt;
+  font-family: "Fjalla One";
+  margin-bottom: 28pt;
+  border: none;
+  border-bottom: 5px solid black;
+  background: #f8f4e5;
+  min-width: 250px;
+  padding-left: 5px;
+  outline: none;
+  color: black;
+}
+
+input:focus {
+  border-bottom: 5px solid #ffa580;
+}
+
+.btn-line {
+  display: inline-block;
+  margin-right: 2%;
+  margin-top: 2%;
+}
+
+button {
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+  line-height: 28pt;
+  padding: 0 20px;
+  background: #ffa580;
+  letter-spacing: 2px;
+  transition: 0.2s all ease-in-out;
+  outline: none;
+  border: 1px solid black;
+  box-shadow: 3px 3px 1px #95a4ff, 3px 3px 1px 1px black;
+}
+button:hover {
+  background: black;
+  color: white;
+  border: 1px solid black;
+}
+
+::selection {
+  background: #ffc8ff;
+}
+
 canvas {
     position: relative;
     display: block;
     margin-left: auto;
     margin-right: auto;
     border: solid 1px black;
+    background: white;
 }
 
 #chat-history {
     height: 402px;
     overflow-y: scroll;
     background-color: #f7fbff;
+    margin-right: 6%;
 }
 
 #chat-input {
-    width: 80%;
+  width: 80%;
+  display: inline-block;
 }
 
 #send {
-    margin: 0;
-    cursor: pointer;
-    border: 1px solid #bbb;
-    overflow: visible;
-    font: bold 13px arial, helvetica, sans-serif;
-    text-decoration: none;
-    white-space: nowrap;
-    color: #fff;
-    text-shadow: 0 1px 0 rgba(0,0,0,.2);
-    background-color: #269CE9;
-    border-color: #269CE9;
-}
-
-#restart {
-    margin: 0;
-    cursor: pointer;
-    border: 1px solid #bbb;
-    overflow: visible;
-    font: bold 13px arial, helvetica, sans-serif;
-    text-decoration: none;
-    white-space: nowrap;
-    color: #fff;
-    text-shadow: 0 1px 0 rgba(0,0,0,.2);
-    background-color: #052c08;
-    border-color: #010f02;
+  display: inline-block;
 }
 
 ul {
@@ -75,6 +155,12 @@ li {
     border: 1px solid #DDDDDD;
 }
 
+#drawingtools {
+  margin-left: 10%;
+  margin-right: 5%;
+  width: 80%;
+  margin-top: 2%;
+}
 
 .colors button {
     display: inline-block;
@@ -213,19 +299,19 @@ li {
   
   .brushes button {
     display: inline-block;
-    border: 1px solid #00000026;
-    border-radius: 0;
+    background: white;
     outline: none;
     cursor: pointer;
     width: 20px;
     height: 20px;
-    margin-bottom: 5px
+    margin-bottom: 5px;
+    padding: revert;
   }
   
   .brushes button:after {
     height: 1px;
     display: block;
-    background: #808080;
+    background: #0c0b0b;
     content: '';
   }
   
@@ -253,4 +339,40 @@ li {
 
 
 
+  
+  #countdown {
+    position: absolute;
+    margin: auto;
+    margin-top: 100px;
+    height: 40px;
+    left: 45%;
+    width: 40px;
+    top: 24%;
+    text-align: center;
+  }
+  
+  #countdown-number {
+    color: black;
+    display: inline-block;
+    line-height: 40px;
+  }
+  
+  svg {
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    transform: rotateY(-180deg) rotateZ(-90deg);
+  }
+  
+  svg circle {
+    stroke-dasharray: 113px;
+    stroke-dashoffset: 0px;
+    stroke-linecap: round;
+    stroke-width: 2px;
+    stroke: black;
+    fill: white;
+  }
   

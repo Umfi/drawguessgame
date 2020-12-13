@@ -111,11 +111,11 @@ class GameView {
     }
 
     showDrawingTools() {
-        $("#drawingtools").show();
+        $("#drawingtools").removeClass("disabled");
     }
 
     hideDrawingTools() {
-        $("#drawingtools").hide();
+        $("#drawingtools").addClass("disabled");
     }
     
     clearCanvas(){
@@ -184,7 +184,7 @@ class GameView {
     }
     
     updateTimer(time){
-        $('#timer').html(time);
+        $('#countdown-number').html(time);
     }
 
     playSound(gameEvent) {

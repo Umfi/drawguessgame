@@ -1,0 +1,24 @@
+h1 {
+    text-align: center;
+}
+
+.doc_link {
+  position:absolute;
+  top:0;
+  right:0;
+  float: right;
+  font: bold 18px Arial;
+  text-decoration: none;
+  background-color: #4355bd;
+  color: #ffffff;
+  padding: 2px 6px 2px 6px;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+  cursor: pointer;
+}
+
+.doc_link:hover {
+  background-color: #50598f;
+}

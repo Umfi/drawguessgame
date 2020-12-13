@@ -12,29 +12,33 @@
     <div id="app">
 
         <h1>Draw Guess Game</h1>
+        <a class="doc_link" href="/documentation.html">Documentation</a>
         
         <div class="row hidden" id="setup">
-            <h2>Choose your user name</h2>
             <form>
-                <label for="username">Username:</label><br>
-                <input type="text" id="username" name="username"><br>
+                <input type="text" id="username" name="username" placeholder="Username"><br>
 
-                <label for="country">Country:</label><br>
-                <input type="text" id="country" name="country" disabled><br>
-                <input type="button" id="geolocation" value="Set my Geo Location">
-
+                <button type="button" id="geolocation">Set my Geo Location</button>
+                <br><br>
+                <input type="text" id="country" name="country" placeholder="No country set yet" disabled><br>
                 <br>
-                <hr>
-                <input type="button" id="save_username_btn" value="Submit">
+                <button type="button" id="save_username_btn">Submit</button>
             </form> 
         </div>
 
         <div class="row hidden" id="game">
             <div class="column">
-                <div><span id="timer"></span></div>
+                
+                <div id="countdown">
+                    <div id="countdown-number"></div>
+                    <svg>
+                      <circle r="18" cx="20" cy="20"></circle>
+                    </svg>
+                </div>
+
                 <canvas id='drawing-pad' width='500' height='400'></canvas>
-                <hr>
-                <div id="drawingtools" class="hidden">
+                
+                <div id="drawingtools" class="disabled">
                     <div class="colors">
                         <button type="button" value="#0000ff"></button>
                         <button type="button" value="#009fff"></button>
@@ -75,17 +79,17 @@
                         <button type="button" value="5"></button>
                       </div>
                       <div>
-                        <button type="button" id="clearScreenBtn">Clear Screen</button>
-                        <button id="download" type="button">Download</button>
+                        <button type="button" id="clearScreenBtn" class="btn-line">Clear Screen</button>
+                        <button id="download" type="button" class="btn-line">Download</button>
                       </div>
                 </div>
             </div>
             <div class="column">
                 <ul id="chat-history">
                 </ul>
-                <hr>
+               
                 <input type="text" id="chat-input" autocomplete="off" placeholder="Type to guess or chat">
-                <input type="button" value="Send" id="send">
+                <button type="button" id="send">Send</button>
             </div>
         </div>      
     </div>
