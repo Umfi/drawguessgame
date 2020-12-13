@@ -95,6 +95,14 @@ input:focus {
   margin-top: 2%;
 }
 
+button:disabled,
+button[disabled]{
+  background: #d2cdcc;
+  color: black;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
 button {
   cursor: pointer;
   display: block;

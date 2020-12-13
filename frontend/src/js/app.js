@@ -1,3 +1,9 @@
+// Helper Functions
+function sanitizeString(str){
+    str = str.replace(/[^a-z0-9 \.,!?_-]/gim,"");
+    return str.trim();
+}
+
 // ============== Model ========================= 
 const userData = {
     'name': "",
@@ -69,31 +75,55 @@ class GameView {
         $("#game").hide();
     }
 
+    disableCreateAccountBtn() {
+        $("#save_username_btn").prop('disabled', true);
+    }
+
+    enableCreateAccountBtn() {
+        $("#save_username_btn").prop('disabled', false);
+    }
+
+    checkCreateAccountBtnState() {
+        if ($("#username").val() != "" && $("#country").val() != "") {
+            this.enableCreateAccountBtn();
+        } else {
+            this.disableCreateAccountBtn();
+        }
+    }
+
     enableRegistration() {
-        document.getElementById('username').addEventListener("keypress", (event ) => {
-            if (event.key == 'Enter') {
-                this.registrationBtnClicked();
-            }
+        document.getElementById('username').addEventListener("change", (event ) => {
+            this.checkCreateAccountBtnState();
         });
+        document.getElementById('country').addEventListener("change", (event ) => {
+            this.checkCreateAccountBtnState();
+        });
+
         document.getElementById('save_username_btn').addEventListener("click", (event ) => {
-                this.registrationBtnClicked();
+            this.registrationBtnClicked();
         });
 
         document.getElementById('geolocation').addEventListener("click", (event ) => {
             app.setGeoLocation();
         });
+
+        this.disableCreateAccountBtn();
     }
 
     registrationBtnClicked() {
-        //TODO: check username for illegal input
         var userName = $("#username").val();
-        app.completeSetup(userName);
+        var country = $("#country").val();
+        app.completeSetup(userName, country);
+    }
+
+    setCountryValue(country) {
+        $("#country").val(country);
+        this.checkCreateAccountBtnState();
     }
 
     enableChat() {
 
         var message = function generateMessageText() {
-            //TODO: check message for illegal input
             return  $("#chat-input").val();
         }
 
@@ -224,18 +254,32 @@ class GameController {
     }
 
     setGeoLocation() {
+        var that = this;
+
         navigator.geolocation.getCurrentPosition(function(location) {
             var lat = location.coords.latitude;
             var lng = location.coords.longitude;
 
             $.get( "http://127.0.0.1:8080/location?long=" + lng + "&lat=" + lat, function( data ) {
-                $("#country").val(data);
-                userData.country = data;
+                that.gameView.setCountryValue(data);
             });
         });
     }
-    completeSetup(userName) {
-        userData.name = userName;
+
+    completeSetup(userName, country) {
+
+        if (userName == "") {
+            alert("Username is empty!");
+            return;
+        }
+
+        if (country == "") {
+            alert("Country is empty!");
+            return;
+        }
+
+        userData.name = sanitizeString(userName);
+        userData.country = sanitizeString(country);
         localStorage.setItem('userData', JSON.stringify(userData));
         this.gameView.renderScreen();
     }
@@ -259,7 +303,7 @@ class GameController {
         // pack the message into an object.
         var data = {};
         data.dataType = type;
-        data.message = message;
+        data.message = sanitizeString(message);
         data.gameState = state;
         websocketGame.socket.send(JSON.stringify(data));
     }
