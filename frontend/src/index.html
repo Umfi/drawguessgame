@@ -3,18 +3,18 @@
 
 <head>
     <title>Draw Guess Game</title>
-
+    <link rel="stylesheet" href="css/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
-    <div id="app">
+    <div id="app" class="container">
 
-        <h1>Draw Guess Game</h1>
+        <h1 class="stripe-text">Draw Guess Game</h1>
         <a class="doc_link" href="/documentation.html">Documentation</a>
         
-        <div class="row hidden" id="setup">
+        <div class="row hideContent" id="setup">
             <form>
                 <input type="text" id="username" name="username" placeholder="Username"><br>
 
@@ -26,22 +26,15 @@
             </form> 
         </div>
 
-        <div class="row hidden" id="game">
+        <div class="row hideContent" id="game">
 
-            <div class="word"></div>
+            <div class="word col col-lg-12 hideContent"></div>
 
-            <div class="column">
+            <div class="col col-lg-5">
                 
-                <div id="countdown">
-                    <div id="countdown-number"></div>
-                    <svg>
-                      <circle r="18" cx="20" cy="20"></circle>
-                    </svg>
-                </div>
-
-                <canvas id='drawing-pad' width='500' height='400'></canvas>
+                <canvas id='drawing-pad' width="480" height="440"></canvas>
                 
-                <div id="drawingtools" class="disabled">
+                <div id="drawingtools" class="hideContent">
                     <div class="colors">
                         <button type="button" value="#0000ff"></button>
                         <button type="button" value="#009fff"></button>
@@ -87,7 +80,10 @@
                       </div>
                 </div>
             </div>
-            <div class="column">
+            <div class="col col-lg-2">
+                <div id="countdown-number" class="center-block"></div>
+            </div>
+            <div class="col col-lg-5">
                 <ul id="chat-history">
                 </ul>
                

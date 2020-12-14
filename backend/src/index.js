@@ -25,14 +25,6 @@ wsServer.on('connection', function (socket, req) {
     var user = new User(socket, queryObject.user);
     lobby.addUser(user);
     console.log("A connection established");
-
-    // Websocket communication
-    user.socket.on("message", function (message) {
-        console.log("Receive message from " + user.name + ": " + message);
-        // send to all users in room.
-        var msg = user.name + " said: " + message;
-        lobby.sendAll(msg);
-    });
 });
 
 

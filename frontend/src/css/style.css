@@ -14,7 +14,7 @@ body {
   justify-items: center;
 }
 
-.hidden {
+.hideContent {
   display: none;
 }
 
@@ -23,23 +23,30 @@ body {
   opacity: 0.4;
 }
 
-.column {
-    float: left;
-    width: 50%;
-}
 
-/* Clear floats after the columns */
-.row:after {
-    content: "";
-    display: table;
-    clear: both;
-    width: 80%;
-}
 
-h1 {
-    text-align: center;
-    margin-bottom: 3%;
-}
+@import url('https://fonts.googleapis.com/css2?family=Catamaran:wght@900&display=swap');
+
+
+h1 { 
+  margin-bottom: 3%;
+  text-align: center; 
+  color: white; 
+  font-size: 8em; 
+  transition: 0.5s; 
+  text-transform: uppercase;
+  font-weight: 900;
+  font-family: 'Catamaran', sans-serif;
+  font-style: italic;
+  text-shadow: 0 1px 0 #ccc, 0 2px 0 #ccc, 
+  0 3px 0 #ccc, 0 4px 0 #ccc, 
+  0 5px 0 #ccc, 0 6px 0 #ccc, 
+  0 7px 0 #ccc, 0 8px 0 #ccc, 
+  0 9px 0 #ccc, 0 10px 0 #ccc, 
+  0 11px 0 #ccc, 0 12px 0 #ccc, 
+  0 20px 30px rgba(0, 0, 0, 0.5); 
+} 
+
 
 .doc_link {
   position:absolute;
@@ -139,7 +146,6 @@ canvas {
     height: 402px;
     overflow-y: scroll;
     background-color: #f7fbff;
-    margin-right: 6%;
 }
 
 #chat-input {
@@ -164,11 +170,14 @@ li {
 }
 
 .word {
-  width: 100%;
   text-align: center;
   margin-bottom: 4%;
   font-size: 24px;
   font-weight: 700;
+  background: white;
+  border: 2px solid black;
+  box-shadow: 3px 3px 1px #ffa580, 3px 3px 1px 1px black;
+  padding: 10px;
 }
 
 #drawingtools {
@@ -352,43 +361,18 @@ li {
   }
   
 
-
-
-
-  
-  #countdown {
-    position: absolute;
-    margin: auto;
-    margin-top: 100px;
-    height: 40px;
-    left: 45%;
-    width: 40px;
-    top: 24%;
-    text-align: center;
-  }
-  
   #countdown-number {
-    color: black;
-    display: inline-block;
-    line-height: 40px;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    padding: 10px;
+    background: #fff;
+    border: 2px solid #666;
+    color: #666;
+    text-align: center;
+    font: 32px Arial, sans-serif;
+    margin-top: 2%;
+    margin-bottom: 2%;
   }
-  
-  svg {
-    position: absolute;
-    z-index: -1;
-    top: 0;
-    right: 0;
-    width: 40px;
-    height: 40px;
-    transform: rotateY(-180deg) rotateZ(-90deg);
-  }
-  
-  svg circle {
-    stroke-dasharray: 113px;
-    stroke-dashoffset: 0px;
-    stroke-linecap: round;
-    stroke-width: 2px;
-    stroke: black;
-    fill: white;
-  }
-  
+
+

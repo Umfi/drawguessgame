@@ -143,14 +143,15 @@ class GameView {
 
     setGuessWord(word) {
         $(".word").html(word);
+        $(".word").show();
     }
 
     showDrawingTools() {
-        $("#drawingtools").removeClass("disabled");
+        $("#drawingtools").show();
     }
 
     hideDrawingTools() {
-        $("#drawingtools").addClass("disabled");
+        $("#drawingtools").hide();
     }
     
     clearCanvas(){
