@@ -31,7 +31,7 @@
 
         <h2>Websockets</h2>
         <p>
-            For communicating between server and clients Javascript websockets were used. When the game is initialized a new websocket on the localhost is constructed.
+            For communicating between server and clients websockets were used. When the game is initialized a new websocket connection to the backend is setup.
         </p>
         
 
@@ -50,7 +50,7 @@
         </ul>
 
         <h3>View</h3>
-        <p>Everything that the uses sees on the screen.</p>
+        <p>Everything that the users sees on the screen.</p>
         <ul>
             <li>Login form with name field and geolocation field</li>
             <li>Canvas for drawing</li>
@@ -74,7 +74,7 @@
 
         <h2>Geolocation API</h2>
         <p>
-            Html5's geolocation api is used at the login screen to get the users location. Therefore the browser needs to have the right to get your current location. Afterwards the 3 digit country code is filled in and stored as your loaction for the game.
+            Html5's geolocation api is used at the login screen to get the users location. Therefore the browser needs to have the right to get your current location. We get the longitude and latitude from the Geolocation API and convert this to a 3 digit country code in our backend. THis code is than stored as your loaction for the game.
         </p>
         
 
@@ -86,6 +86,11 @@
 
         <h2>Local Storage</h2>
         <p>
+           We use the local storage to store data like the user-model object. If it is stored we assume one has already registered once and has an account and can directly play. Otherwise one sees the registration screen.
+        </p>
+
+        <h2>File API</h2>
+        <p>
             The drawn image is downloadable at any time. It is implemented via a html butten which when pressed gets the content of the canvas, lets you choose the name of the file and downloads the drawing as a .png file.
         </p>
 
@@ -96,18 +101,8 @@
         
 
         <h2>Backend</h2>
-        <p>For the webserver in the backend NodeJS and Express were used.<br></p>
+        <p>In the backend runs a NodeJS Server. We use ws for web socket communication. Express as an simple webserver. And which-country to convert longitude and latitude to a country code. As the main focus of this project is the frontend, we are not going to explain the backend logic in detail. The code is short and more or less self-explaining.<br></p>
 
-        <h3>NodeJS</h3>
-        <p>
-            Executing of the Websockets and the Webserver.<br>
-        </p>
-        
-
-        <h3>Express</h3>
-        <p>
-            Express.js is a backend web application framework for NodeJS. It was used for building the web app.<br>
-        </p>
 
     </div>
 </body>
