@@ -1,18 +1,114 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Draw Guess Game</title>
-        <link rel="stylesheet" href="/css/documentation.css">
-    </head>
-    <body>
-        <div>
-            <h1>Documentation</h1>
+<html style="background-color: rgb(255, 247, 175)">
+<head>
+    <title>Draw Guess Game</title>
+    <link rel="stylesheet" href="/css/documentation.css">
+</head>
+<body>
+    <div>
+        <h1>Documentation of code and design</h1>
+        <a class="doc_link" href="/">Back to Game</a><hr />
+        <p>&nbsp;</p>
 
-            <a class="doc_link" href="/">Back to Game</a>
-            <hr>
-            <p>
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-            </p>
-        </div>
-    </body>
+        <h2>Generel game structure</h2>
+        <p>
+            The goal is on the one hand to guess the drawn word correctly as fast as possible and on the other hand to draw the shown word as accurate as possible.<br>
+            One player (the drawing player) sees a random word in the middle of the screen, which has to be drawn in the canvas below. Different colors and line widths can be choosen to draw. Also the whole canvas (Clear Screen button) can be cleared.<br><br>
+            <img src="img/view_drawer.jpg" alt="view_drawer">
+            <p>Image 1: View of the drawer</p><br>
+        </p>
+        <p>
+            All other players have to guess and type their assumtions in the chat. As a hint, the number of letters that make up the word are shown as underscores in the middle of the screen.<br>
+            <img src="img/view_guesser.jpg" alt="view_guesser">
+            <p>Image 2: View of the guesser</p><br>
+        </p>
+        <p>
+            There is a time limit of 60 seconds per round. If a player is able to guess the word before the time runs out, he is the winner of this round and the next player is on the drawing turn.<br>
+            When nobody guesses right before the time runs out, nobody wins and the next player is on the drawing turn.<br><br>
+            There is the possibility for the drawing player to download the drawing as a .jpg file and store it locally.
+        </p>
+        
+
+        <h2>Websockets</h2>
+        <p>
+            For communicating between server and clients Javascript websockets were used. When the game is initialized a new websocket on the localhost is constructed.
+        </p>
+        
+
+        <h2>Model View Controller</h2>
+        <p>The webapp is divided between the model, view and controller elements.</p>
+
+        <h3>Model</h3>
+        <p>Stores the information of the game and the useres.</p>
+        <ul>
+            <li>The user data (name and country) which was entered in the login form</li>
+            <li>The websocketGame object which holds all important data for the game</li>
+            <li>If the player has to draw or to guess</li>
+            <li>Information of the drawing</li>
+            <li>game events like joining, leaving and winning</li>
+            <li>other game logic like the timer value</li>
+        </ul>
+
+        <h3>View</h3>
+        <p>Everything that the uses sees on the screen.</p>
+        <ul>
+            <li>Login form with name field and geolocation field</li>
+            <li>Canvas for drawing</li>
+            <li>Drawing tools</li>
+            <li>Clear and download button</li>
+            <li>Chat box</li>
+            <li>Timer</li>
+        </ul>
+
+        <h3>Controller</h3>
+        <p>Gets all the imputs and converts it to commands for the model and view</p>
+        <ul>
+            <li>User data</li>
+            <li>Geolocation</li>
+            <li>Game initialization</li>
+            <li>Drawing</li>
+            <li>Websocket events</li>
+            <li>Timer<br /><br /></li>
+        </ul>
+        
+
+        <h2>Geolocation API</h2>
+        <p>
+            Html5's geolocation api is used at the login screen to get the users location. Therefore the browser needs to have the right to get your current location. Afterwards the 3 digit country code is filled in and stored as your loaction for the game.
+        </p>
+        
+
+        <h2>Canvas</h2>
+        <p>
+            The drawing player needs to draw the word, which is seen in the middle, in the canvas below. It can be choosen between many different colors and 5 line widths. There is only a limited time of 60 seconds for one drawing/guessing round. After all players guessed right or the time runs out, the next player has to draw another random word.
+        </p>
+        
+
+        <h2>Local Storage</h2>
+        <p>
+            The drawn image is downloadable at any time. It is implemented via a html butten which when pressed gets the content of the canvas, lets you choose the name of the file and downloads the drawing as a .png file.
+        </p>
+
+        <h2>Audio Elements</h2>
+        <p>
+            The app uses the Java Script Audio API. There are 3 different sounds (join, leave and win) in our game. When one of this events occur, the JS audio constructor creates a new HTMLAudioElement and the user can hear the appropriate soundeffect.
+        </p>
+        
+
+        <h2>Backend</h2>
+        <p>For the webserver in the backend NodeJS and Express were used.<br></p>
+
+        <h3>NodeJS</h3>
+        <p>
+            Executing of the Websockets and the Webserver.<br>
+        </p>
+        
+
+        <h3>Express</h3>
+        <p>
+            Express.js is a backend web application framework for NodeJS. It was used for building the web app.<br>
+        </p>
+
+    </div>
+</body>
 </html>
