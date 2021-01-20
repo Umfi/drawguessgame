@@ -4,6 +4,9 @@ function sanitizeString(str){
     return str.trim();
 }
 
+var client_url = "127.0.0.1";
+var server_url = "drawguessgame.herokuapp.com";
+
 // ============== Model ========================= 
 const userData = {
     'name': "",
@@ -225,15 +228,15 @@ class GameView {
 
     playSound(gameEvent) {
         if (gameEvent === websocketGame.JOIN) {
-            var audio = new Audio('http://127.0.0.1/audio/join.wav');
+            var audio = new Audio('http://' + client_url + '/audio/join.wav');
             audio.play();
         }
         else if (gameEvent === websocketGame.LEAVE) {
-            var audio = new Audio('http://127.0.0.1/audio/leave.wav');
+            var audio = new Audio('http://' + client_url + '/audio/leave.wav');
             audio.play();
         }
         else if (gameEvent === websocketGame.WIN) {
-            var audio = new Audio('http://127.0.0.1/audio/win.wav');
+            var audio = new Audio('http://' + client_url + '/audio/win.wav');
             audio.play();
         }
     }
@@ -283,7 +286,7 @@ class GameController {
             var lat = location.coords.latitude;
             var lng = location.coords.longitude;
 
-            $.get( "http://127.0.0.1:8080/location?long=" + lng + "&lat=" + lat, function( data ) {
+            $.get( "http://" + server_url + "/location?long=" + lng + "&lat=" + lat, function( data ) {
                 that.gameView.setCountryValue(data);
             });
         });
@@ -309,7 +312,7 @@ class GameController {
 
     initGame() {
         var user = this.getUser().name;
-        websocketGame.socket = new WebSocket("ws://127.0.0.1:8080?user=" + user);
+        websocketGame.socket = new WebSocket("wss://" + server_url + "?user=" + user);
         this.gameView.enableChat();
         var that = this;
         websocketGame.socket.onmessage = function(evt) {that.handleWebsocketEvents(evt); };
