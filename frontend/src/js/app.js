@@ -286,7 +286,7 @@ class GameController {
             var lat = location.coords.latitude;
             var lng = location.coords.longitude;
 
-            $.get( "http://" + server_url + "/location?long=" + lng + "&lat=" + lat, function( data ) {
+            $.get( "https://" + server_url + "/location?long=" + lng + "&lat=" + lat, function( data ) {
                 that.gameView.setCountryValue(data);
             });
         });
