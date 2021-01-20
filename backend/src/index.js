@@ -30,7 +30,7 @@ wsServer.on('connection', function (socket, req) {
 
 
 // Web-Server
-const server = app.listen(config.PORT);
+const server = app.listen(process.env.PORT || config.PORT);
 
 server.on('upgrade', (request, socket, head) => {
     wsServer.handleUpgrade(request, socket, head, socket => {
